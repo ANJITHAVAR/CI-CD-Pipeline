@@ -9,13 +9,13 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building the code using Maven'
-                // Tool: Maven
+                echo 'Tool: Maven'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
                 echo 'Running unit and integration tests using JUnit'
-                // Tools: JUnit for unit tests, Selenium for integration tests
+                echo 'Tools: JUnit for unit tests, Selenium for integration tests'
             }
             post {
                 always {
@@ -24,7 +24,7 @@ pipeline {
                         subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
                         body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Test stage.</p>
                                  <p>Status: ${currentBuild.currentResult}</p>""",
-                        to: "${RECIPIENT_EMAIL}",
+                        to: "${env.RECIPIENT_EMAIL}",
                         attachLog: true
                     )
                 }
@@ -33,13 +33,13 @@ pipeline {
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing code quality using SonarQube'
-                // Tool: SonarQube
+                echo 'Tool: SonarQube'
             }
         }
         stage('Security Scan') {
             steps {
                 echo 'Performing security scan using OWASP ZAP'
-                // Tool: OWASP ZAP
+                echo 'Tool: OWASP ZAP'
             }
             post {
                 always {
@@ -48,7 +48,7 @@ pipeline {
                         subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
                         body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.</p>
                                  <p>Status: ${currentBuild.currentResult}</p>""",
-                        to: "${RECIPIENT_EMAIL}",
+                        to: "${env.RECIPIENT_EMAIL}",
                         attachLog: true
                     )
                 }
@@ -63,7 +63,7 @@ pipeline {
         stage('Integration Tests on Staging') {
             steps {
                 echo 'Running integration tests on staging environment'
-                // Tools: Same as integration test tools used earlier
+                echo 'Tools: Selenium for integration tests'
             }
         }
         stage('Deploy to Production') {
