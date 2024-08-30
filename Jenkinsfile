@@ -29,7 +29,7 @@ pipeline {
                         The full build log is attached.""",
                         mimeType: 'text/plain',
                         attachmentsPattern: "build.log"
-                       )
+                        )
                     }
                 }
             }
