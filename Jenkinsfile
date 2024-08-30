@@ -36,15 +36,18 @@ pipeline {
             }
             post {
                 always {
-                    // Send email notification after Security Scan stage
-                     emailext (
-                         to: "anjithavarghese11@gmail.com",
-                         subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
-                         body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
-                         Status: ${currentBuild.currentResult}""",
-                         attachLog: true, // This will attach the build log
-                         compressLog: true // Compress the log file to reduce email size
-                   )
+                    script {
+                       def log = currentBuild.rawBuild.getLog(50) // Get the last 50 lines of the log
+                       emailext (
+                       to: "anjithavarghese11@gmail.com",
+                       subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
+                       body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
+                       Status: ${currentBuild.currentResult}
+                       Last 50 lines of log:
+                       ${log.join('\n')}""",
+                       mimeType: 'text/plain'
+                      )
+                   }
                 }
             }
         }
