@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // Specify the email address to send notifications
-        RECIPIENT_EMAIL = 'anjithavarghese11@gmail.com'
-    }
     stages {
         stage('Build') {
             steps {
@@ -41,13 +37,10 @@ pipeline {
             post {
                 always {
                     // Send email notification after Security Scan stage
-                    emailext (
-                        subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
-                        body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.</p>
-                                 <p>Status: ${currentBuild.currentResult}</p>""",
-                        to: "${env.RECIPIENT_EMAIL}",
-                        // attachLog: true
-                    )
+                     mail to: "anjithavarghese11@gmail.com",
+                     subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
+                     body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.</p>
+                                 <p>Status: ${currentBuild.currentResult}</p>"""
                 }
             }
         }
