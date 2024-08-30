@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    environment {
+        // Specify the email address to send notifications
+        RECIPIENT_EMAIL = 'anjithavarghese11@gmail.com'
+    }
     stages {
         stage('Build') {
             steps {
@@ -12,6 +17,18 @@ pipeline {
                 echo 'Running unit and integration tests using JUnit'
                 // Tools: JUnit for unit tests, Selenium for integration tests
             }
+            post {
+                always {
+                    // Send email notification after Test stage
+                    emailext (
+                        subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
+                        body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Test stage.</p>
+                                 <p>Status: ${currentBuild.currentResult}</p>""",
+                        to: "${RECIPIENT_EMAIL}",
+                        attachLog: true
+                    )
+                }
+            }
         }
         stage('Code Analysis') {
             steps {
@@ -23,6 +40,18 @@ pipeline {
             steps {
                 echo 'Performing security scan using OWASP ZAP'
                 // Tool: OWASP ZAP
+            }
+            post {
+                always {
+                    // Send email notification after Security Scan stage
+                    emailext (
+                        subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
+                        body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.</p>
+                                 <p>Status: ${currentBuild.currentResult}</p>""",
+                        to: "${RECIPIENT_EMAIL}",
+                        attachLog: true
+                    )
+                }
             }
         }
         stage('Deploy to Staging') {
