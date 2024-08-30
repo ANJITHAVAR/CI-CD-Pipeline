@@ -37,10 +37,14 @@ pipeline {
             post {
                 always {
                     // Send email notification after Security Scan stage
-                     mail to: "anjithavarghese11@gmail.com",
-                     subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
-                     body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.</p>
-                                 <p>Status: ${currentBuild.currentResult}</p>"""
+                     emailext (
+                         to: "anjithavarghese11@gmail.com",
+                         subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
+                         body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
+                         Status: ${currentBuild.currentResult}""",
+                         attachLog: true, // This will attach the build log
+                         compressLog: true // Compress the log file to reduce email size
+                   )
                 }
             }
         }
