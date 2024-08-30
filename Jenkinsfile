@@ -25,7 +25,7 @@ pipeline {
                         body: """<p>Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.</p>
                                  <p>Status: ${currentBuild.currentResult}</p>""",
                         to: "${env.RECIPIENT_EMAIL}",
-                        attachLog: true
+                        // attachLog: true
                     )
                 }
             }
@@ -49,7 +49,7 @@ pipeline {
                         body: """<p>Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.</p>
                                  <p>Status: ${currentBuild.currentResult}</p>""",
                         to: "${env.RECIPIENT_EMAIL}",
-                        attachLog: true
+                        // attachLog: true
                     )
                 }
             }
