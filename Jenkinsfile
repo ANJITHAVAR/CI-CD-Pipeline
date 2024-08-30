@@ -16,15 +16,20 @@ pipeline {
             post {
                 always {
                     script {
+                        // Write the log to a file
+                        def logFile = "${env.WORKSPACE}/build.log"
+                        writeFile file: logFile, text: currentBuild.rawBuild.getLog().join('\n')
+
+                        // Send the email with the log file attached
                         emailext (
-                            // Send email notification after Test stage
-                            to: "anjithavarghese11@gmail.com",
-                            subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
-                            body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
-                            Status: ${currentBuild.currentResult}""",
-                            attachLog: true,
-                            mimeType: 'text/plain'
-                        )
+                        to: "anjithavarghese11@gmail.com",
+                        subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
+                        body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
+                        Status: ${currentBuild.currentResult}
+                        The full build log is attached.""",
+                        mimeType: 'text/plain',
+                        attachmentsPattern: "build.log"
+                       )
                     }
                 }
             }
