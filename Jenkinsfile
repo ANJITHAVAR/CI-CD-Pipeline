@@ -15,11 +15,17 @@ pipeline {
             }
             post {
                 always {
-                    // Send email notification after Test stage
-                     mail to: "anjithavarghese11@gmail.com",
-                     subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
-                     body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
-                     Status: ${currentBuild.currentResult}"""
+                    script {
+                        emailext (
+                            // Send email notification after Test stage
+                            to: "anjithavarghese11@gmail.com",
+                            subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
+                            body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
+                            Status: ${currentBuild.currentResult}""",
+                            attachLog: true,
+                            mimeType: 'text/plain'
+                        )
+                    }
                 }
             }
         }
