@@ -48,19 +48,20 @@ pipeline {
             post {
                 always {
                     script {
-                        // Write the log to a file
-                        def logFile = "${env.WORKSPACE}/security_scan.log"
-                        writeFile file: logFile, text: currentBuild.rawBuild.getLog().join('\n')
+                       // Write the last 50 lines of the log to a file
+                       def logFile = "${env.WORKSPACE}/build.log"
+                       def logLines = currentBuild.getLog(50).join('\n')
+                       writeFile file: logFile, text: logLines
 
-                        // Send email notification after Security Scan stage with the log file attached
-                        emailext (
-                            to: "anjithavarghese11@gmail.com",
-                            subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
-                            body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Security Scan stage.
-                            Status: ${currentBuild.currentResult}.
-                            Please find the attached log for more details.""",
-                            attachmentsPattern: "security_scan.log",
-                            mimeType: 'text/plain'
+                      // Send email notification with the log file attached
+                      emailext (
+                         to: "anjithavarghese11@gmail.com",
+                         subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Stage ${currentBuild.currentResult}",
+                         body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the stage.
+                         Status: ${currentBuild.currentResult}.
+                         Please find the attached log.""",
+                         attachmentsPattern: "build.log",
+                         mimeType: 'text/plain'
                         )
                     }
                 }
