@@ -23,7 +23,7 @@ pipeline {
                     script {
                         // Write the log to a file
                         def logFile = "${env.WORKSPACE}/unit_integration_tests.log"
-                        def logLines = currentBuild.getLog(50).join('\n')
+                        def logLines = currentBuild.getLog(25).join('\n')
                         writeFile file: logFile, text: logLines
 
                         // Send email notification with the log file attached
@@ -58,7 +58,7 @@ pipeline {
                     script {
                         // Write the log to a file
                         def logFile = "${env.WORKSPACE}/security_scan.log"
-                        def logLines = currentBuild.getLog(50).join('\n')
+                        def logLines = currentBuild.getLog(25).join('\n')
                         writeFile file: logFile, text: logLines
 
                         // Send email notification with the log file attached
