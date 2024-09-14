@@ -16,9 +16,10 @@ pipeline {
             post {
                 always {
                     script {
-                        // Save the build log to a file
+                        // Capture build log safely
+                        def buildLog = currentBuild.getLog(100) // Get the last 100 lines of the log
                         def logFile = "${env.WORKSPACE}/build.log"
-                        writeFile file: logFile, text: currentBuild.rawBuild.getLog().join('\n')
+                        writeFile file: logFile, text: buildLog.join('\n')
 
                         // Archive the log file
                         archiveArtifacts artifacts: 'build.log', allowEmptyArchive: true
@@ -48,9 +49,10 @@ pipeline {
             post {
                 always {
                     script {
-                        // Save the build log to a file
+                        // Capture build log safely
+                        def buildLog = currentBuild.getLog(100) // Get the last 100 lines of the log
                         def logFile = "${env.WORKSPACE}/build.log"
-                        writeFile file: logFile, text: currentBuild.rawBuild.getLog().join('\n')
+                        writeFile file: logFile, text: buildLog.join('\n')
 
                         // Archive the log file
                         archiveArtifacts artifacts: 'build.log', allowEmptyArchive: true
