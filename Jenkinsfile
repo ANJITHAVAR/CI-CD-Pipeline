@@ -15,14 +15,13 @@ pipeline {
             }
             post {
                 always {
-                    // Send email notification after Test stage
-                    emailext(
-                        to: "anjithavarghese11@gmail.com",
-                        subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
-                        body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
-                                 Status: ${currentBuild.currentResult}""",
-                        attachLog: true
-                    )
+                    // Send email notification after Test stage with build log attached
+                    mail to: "anjithavarghese11@gmail.com",
+                    subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
+                    body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
+                    Status: ${currentBuild.currentResult}
+                    Please find the attached build log for details.""",
+                    attachLog: true
                 }
             }
         }
@@ -39,14 +38,13 @@ pipeline {
             }
             post {
                 always {
-                    // Send email notification after Security Scan stage
-                    emailext(
-                        to: "anjithavarghese11@gmail.com",
-                        subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
-                        body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Security Scan stage.
-                                 Status: ${currentBuild.currentResult}""",
-                        attachLog: true
-                    )
+                    // Send email notification after Security Scan stage with build log attached
+                    mail to: "anjithavarghese11@gmail.com",
+                    subject: "Jenkins Job - ${JOB_NAME} #${BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
+                    body: """Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.
+                    Status: ${currentBuild.currentResult}
+                    Please find the attached build log for details.""",
+                    attachLog: true
                 }
             }
         }
