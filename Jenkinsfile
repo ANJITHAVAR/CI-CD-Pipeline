@@ -16,13 +16,13 @@ pipeline {
             post {
                 always {
                     script {
-                        // Capture the entire build log safely
-                        def buildLog = currentBuild.getRawBuild().log // Get the full log
-                        def logFile = "${env.WORKSPACE}/test-build.log"
+                        // Capture build log safely
+                        def buildLog = currentBuild.getLog(100) // Get the last 100 lines of the log
+                        def logFile = "${env.WORKSPACE}/build.log"
                         writeFile file: logFile, text: buildLog.join('\n')
 
                         // Archive the log file
-                        archiveArtifacts artifacts: 'test-build.log', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'build.log', allowEmptyArchive: true
 
                         // Send email notification after Test stage with the log attached
                         mail to: "anjithavarghese11@gmail.com",
@@ -30,7 +30,7 @@ pipeline {
                         body: """Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
                         Status: ${currentBuild.currentResult}.
                         Please find the attached build log for details.""",
-                        attachmentsPattern: 'test-build.log'
+                        attachmentsPattern: 'build.log'
                     }
                 }
             }
@@ -49,13 +49,13 @@ pipeline {
             post {
                 always {
                     script {
-                        // Capture the full build log safely
-                        def buildLog = currentBuild.getRawBuild().log // Get the full log
-                        def logFile = "${env.WORKSPACE}/security-scan-build.log"
+                        // Capture build log safely
+                        def buildLog = currentBuild.getLog(1000) // Get the last 100 lines of the log
+                        def logFile = "${env.WORKSPACE}/build.log"
                         writeFile file: logFile, text: buildLog.join('\n')
 
                         // Archive the log file
-                        archiveArtifacts artifacts: 'security-scan-build.log', allowEmptyArchive: true
+                        archiveArtifacts artifacts: 'build.log', allowEmptyArchive: true
 
                         // Send email notification after Security Scan stage with the log attached
                         mail to: "anjithavarghese11@gmail.com",
@@ -63,7 +63,7 @@ pipeline {
                         body: """Build ${BUILD_NUMBER} on ${JOB_NAME} has completed the Security Scan stage.
                         Status: ${currentBuild.currentResult}.
                         Please find the attached build log for details.""",
-                        attachmentsPattern: 'security-scan-build.log'
+                        attachmentsPattern: 'build.log'
                     }
                 }
             }
@@ -76,4 +76,20 @@ pipeline {
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integra
+                echo 'Running integration tests on staging environment'
+                echo 'Tools: Selenium for integration tests'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'Deploying application to production environment (AWS EC2)'
+                // Final production deployment
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Pipeline completed'
+        }
+    }
+}
