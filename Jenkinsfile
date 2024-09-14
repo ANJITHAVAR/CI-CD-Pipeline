@@ -18,9 +18,9 @@ pipeline {
                     emailext (
                         attachLog: true,
                         to: 'anjithavarghese11@gmail.com',
-                        subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}",
-                        body: '''Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
-                        Status: ${currentBuild.currentResult}'''
+                        subject: "test stage",
+                        body: '''Build  has completed the Test stage.
+                        '''
                     )
                 }
             }
@@ -41,9 +41,9 @@ pipeline {
                     emailext (
                         attachLog: true,
                         to: 'anjithavarghese11@gmail.com',
-                        subject: "Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}",
-                        body: '''Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Security Scan stage.
-                        Status: ${currentBuild.currentResult}'''
+                        subject: "Jenkins Job - - Security Scan Stage ",
+                        body: '''Build  has completed the Security Scan stage.
+                        '''
                     )
                 }
             }
