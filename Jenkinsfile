@@ -1,3 +1,5 @@
+Jenkinsfile 
+
 pipeline {
     agent any
 
@@ -12,21 +14,10 @@ pipeline {
             steps {
                 echo 'Running unit and integration tests using JUnit'
                 echo 'Tools: JUnit for unit tests, Selenium for integration tests'
+                emailext (attachLog: true, body: '''Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
+Status: ${currentBuild.currentResult}''', subject: 'Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}', to: 'anjithavarghese11@gmail.com')
             }
-            post {
-                always {
-                    // Send email notification after the Test stage with the log attached
-                    emailext(
-                        attachLog: true,
-                        to: 'anjithavarghese11@gmail.com',
-                        subject: 'Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Test Stage ${currentBuild.currentResult}',
-                        body: '''Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Test stage.
-
-                    Status: ${currentBuild.currentResult}'''
-                    )
-                }
-            }
-        }
+                    }
         stage('Code Analysis') {
             steps {
                 echo 'Analyzing code quality using SonarQube'
@@ -37,20 +28,10 @@ pipeline {
             steps {
                 echo 'Performing security scan using OWASP ZAP'
                 echo 'Tool: OWASP ZAP'
+                emailext (attachLog: true, body: '''Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Security Scan stage.
+Status: ${currentBuild.currentResult}''', subject: 'Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}', to: 'anjithavarghese11@gmail.com')
             }
-            post {
-                always {
-                    // Send email notification after Security Scan stage with the log attached
-                    emailext(
-                        attachLog: true,
-                        to: 'anjithavarghese11@gmail.com',
-                        subject: 'Jenkins Job - ${env.JOB_NAME} #${env.BUILD_NUMBER} - Security Scan Stage ${currentBuild.currentResult}',
-                        body: '''Build ${env.BUILD_NUMBER} on ${env.JOB_NAME} has completed the Security Scan stage.
-
-                        Status: ${currentBuild.currentResult}'''
-                    )
-                }
-            }
+            
         }
         stage('Deploy to Staging') {
             steps {
