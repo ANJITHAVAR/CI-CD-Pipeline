@@ -16,8 +16,8 @@ pipeline {
             post {
                 always {
                     script {
-                        // Capture build log safely
-                        def buildLog = currentBuild.getLog(100) // Get the last 100 lines of the log
+                        // Capture the entire build log safely
+                        def buildLog = currentBuild.getRawBuild().log // Get the full log
                         def logFile = "${env.WORKSPACE}/test-build.log"
                         writeFile file: logFile, text: buildLog.join('\n')
 
@@ -49,8 +49,8 @@ pipeline {
             post {
                 always {
                     script {
-                        // Capture build log safely
-                        def buildLog = currentBuild.getLog(100) // Get the last 100 lines of the log
+                        // Capture the full build log safely
+                        def buildLog = currentBuild.getRawBuild().log // Get the full log
                         def logFile = "${env.WORKSPACE}/security-scan-build.log"
                         writeFile file: logFile, text: buildLog.join('\n')
 
@@ -76,20 +76,4 @@ pipeline {
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo 'Running integration tests on staging environment'
-                echo 'Tools: Selenium for integration tests'
-            }
-        }
-        stage('Deploy to Production') {
-            steps {
-                echo 'Deploying application to production environment (AWS EC2)'
-                // Final production deployment
-            }
-        }
-    }
-    post {
-        always {
-            echo 'Pipeline completed'
-        }
-    }
-}
+                echo 'Running integra
