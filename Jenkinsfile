@@ -66,11 +66,7 @@ pipeline {
                 // Final production deployment
             }
         }
-        stage('Complete') {
-      steps {
-                echo 'Deployment and testing are complete'
-            }
-        }
+       
 
     }
     post {
